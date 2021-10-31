@@ -75,6 +75,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>MatteoRealDBDataSet.xsd</DependentUpon>
     </Compile>
+    <Compile Include="MatteoRealDBDataSet1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MatteoRealDBDataSet1.xsd</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -102,6 +107,17 @@
     </None>
     <None Include="MatteoRealDBDataSet.xss">
       <DependentUpon>MatteoRealDBDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="MatteoRealDBDataSet1.xsc">
+      <DependentUpon>MatteoRealDBDataSet1.xsd</DependentUpon>
+    </None>
+    <None Include="MatteoRealDBDataSet1.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>MatteoRealDBDataSet1.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="MatteoRealDBDataSet1.xss">
+      <DependentUpon>MatteoRealDBDataSet1.xsd</DependentUpon>
     </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
