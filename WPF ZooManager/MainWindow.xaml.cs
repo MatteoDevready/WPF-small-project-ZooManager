@@ -63,5 +63,45 @@ namespace WPF_ZooManager
                 MessageBox.Show(e.ToString());
             }
         }
+
+
+        private void ShowAssociatedAnimals()
+        {
+            try
+            {
+                string query = "select * from Animal a inner join ZooAnimal za on a.Id = za.AnimalId " +
+                    "where za.ZooId = @ZooId";
+
+                SqlCommand sqlCommand = new SqlCommand(query, sqlConnection);
+                //the SQL Data adapter can be imagined like an interface to make tables Usable by C# Objects
+                SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(sqlCommand);
+
+                using (sqlDataAdapter)
+                {
+                    sqlCommand.Parameters.AddWithValue("@ZooId", listZoos.SelectedValue);
+
+                    DataTable animalTable = new DataTable();
+                    sqlDataAdapter.Fill(animalTable);
+
+                    //Which information of the table in datatable should be shown in the listbox?
+                    listAssociatedAnimals.DisplayMemberPath = "Name";
+                    //which values should be delivered, when an item from the list box is selected?
+                    listAssociatedAnimals.SelectedValuePath = "Id";
+                    //The reference to the data the listbox should populate
+                    listAssociatedAnimals.ItemsSource = animalTable.DefaultView;
+                }
+            }
+            catch (Exception e)
+            {
+
+                MessageBox.Show(e.ToString());
+            }
+        }
+
+
+        private void listZoos_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ShowAssociatedAnimals();
+        }
     }
 }
