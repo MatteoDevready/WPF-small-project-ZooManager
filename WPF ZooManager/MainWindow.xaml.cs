@@ -132,6 +132,7 @@ namespace WPF_ZooManager
         private void listZoos_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ShowAssociatedAnimals();
+            ShowSelectedZooInTextBox();
         }
 
         private void DeleteZoo_Click(object sender, RoutedEventArgs e)
@@ -261,8 +262,119 @@ namespace WPF_ZooManager
             }
         }
 
+        private void ShowSelectedZooInTextBox() 
+        {
+            try
+            {
+                string query = "select location from Zoo where Id = @ZooId";
+
+                SqlCommand sqlCommand = new SqlCommand(query, sqlConnection);
+                //the SQL Data adapter can be imagined like an interface to make tables Usable by C# Objects
+                SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(sqlCommand);
+
+                using (sqlDataAdapter)
+                {
+                    sqlCommand.Parameters.AddWithValue("@ZooId", listZoos.SelectedValue);
+
+                    DataTable zooDataTable = new DataTable();
+                    sqlDataAdapter.Fill(zooDataTable);
+
+                    myTextBox.Text = zooDataTable.Rows[0]["Location"].ToString();
+                }
+            }
+            catch (Exception e)
+            {
+
+                MessageBox.Show(e.ToString());
+            }
+        }
+
+        private void ShowSelectedAnimalInTextBox() 
+        {
+            try
+            {
+                string query = "select Name from Animal where Id = @AnimalId";
+
+                SqlCommand sqlCommand = new SqlCommand(query, sqlConnection);
+                //the SQL Data adapter can be imagined like an interface to make tables Usable by C# Objects
+                SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(sqlCommand);
+
+                using (sqlDataAdapter)
+                {
+                    sqlCommand.Parameters.AddWithValue("@AnimalId", listAllAnimals.SelectedValue);
+
+                    DataTable animalDataTable = new DataTable();
+                    sqlDataAdapter.Fill(animalDataTable);
+
+                    myTextBox.Text = animalDataTable.Rows[0]["Name"].ToString();
+                }
+            }
+            catch (Exception e)
+            {
+
+                MessageBox.Show(e.ToString());
+            }
+        }
+
+        private void listAllAnimals_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+            ShowSelectedAnimalInTextBox();
+        }
 
 
+        private void UpdateZoo_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                //new query
+                string query = "update Zoo Set Location = @Location where Id = @ZooId ";
+                SqlCommand sqlCommand = new SqlCommand(query, sqlConnection);
 
+                sqlConnection.Open();
+                //selected value is the actual Id
+                sqlCommand.Parameters.AddWithValue("@ZooId", listZoos.SelectedValue);
+                sqlCommand.Parameters.AddWithValue("@Location", myTextBox.Text);
+
+                sqlCommand.ExecuteScalar();
+            }
+            catch (Exception ex)
+            {
+
+                MessageBox.Show(ex.ToString());
+            }
+            finally
+            {
+                sqlConnection.Close();
+                ShowZoos();
+            }
+        }
+
+        private void UpdateAnimal_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                //new query
+                string query = "update Animal Set Name = @Name where Id = @AnimalId ";
+                SqlCommand sqlCommand = new SqlCommand(query, sqlConnection);
+
+                sqlConnection.Open();
+                //selected value is the actual Id
+                sqlCommand.Parameters.AddWithValue("@AnimalId", listAllAnimals.SelectedValue);
+                sqlCommand.Parameters.AddWithValue("@Name", myTextBox.Text);
+
+                sqlCommand.ExecuteScalar();
+            }
+            catch (Exception ex)
+            {
+
+                MessageBox.Show(ex.ToString());
+            }
+            finally
+            {
+                sqlConnection.Close();
+                ShowAllAnimals();
+            }
+        }
     }
 }
